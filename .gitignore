@@ -1,0 +1,23 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets
+.env
+!.env.example
+
+# Node / React
+node_modules/
+frontend/dist/
+
+# Raw scraper cache (re-creatable); cleaned data in scraper/data is committed
+scraper/data/raw/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

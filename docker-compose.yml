@@ -1,0 +1,28 @@
+# Optional: runs MySQL 8 in Docker so you don't need a local MySQL install.
+# Start:  docker compose up -d
+# Stop:   docker compose down        (add -v to also delete the data volume)
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: listings-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: business_listings
+      MYSQL_USER: listings_user
+      MYSQL_PASSWORD: listings_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Runs once, on first start, to create listing_master
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql_data:
